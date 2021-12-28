@@ -1,3 +1,4 @@
+from functools import reduce
 class BinaryHeap(object):
     def __init__(self, key = None) -> None:
         self.values = []
@@ -18,6 +19,33 @@ class BinaryHeap(object):
         current_index = len(self.values) - 1
         
         self.__heap_up(current_index)
+        
+    def extract_min(self):
+        if not self.values:
+            raise LookupError("Empty heap")
+
+        self.values[0], self.values[-1] = self.values[-1], self.values[0]
+        min = self.values.pop()
+        
+        self.__heap_down(0)
+        
+        return min
+        
+    def __heap_down(self, i) -> None:
+        while i < len(self.values):
+            child_indices = self.__get_children_indices(i)
+            
+            m = i
+            for c in child_indices:
+                if c < len(self.values):
+                    if self.key(self.values[c], self.values[m]):
+                        m = c
+            
+            if m == i:
+                break
+            else:
+                self.values[m], self.values[i] = self.values[i], self.values[m] 
+                i = m
             
     def __heap_up(self, i) -> None:        
         while i != 0:
