@@ -17,7 +17,9 @@ class BinaryHeap(object):
             return None
 
     def insert(self, val) -> None:
-        self.values.append(val)
+        new_entry = self.__create_value(val)
+        self.values.append(new_entry)
+
         current_index = len(self.values) - 1
 
         self.__heap_up(current_index)
@@ -72,6 +74,9 @@ class BinaryHeap(object):
 
     def __swap_values(self, i, r):
         self.values[i], self.values[r] = self.values[r], self.values[i]
+
+    def __create_value(self, val):
+        return val
 
     def __get_value(self, i):
         return self.values[i]
