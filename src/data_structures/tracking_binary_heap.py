@@ -19,6 +19,14 @@ class TrackingBinaryHeap(BinaryHeap):
         if i < len(self.values):
             self.heap_down(i)
 
+    def change_value(self, tracker, new_value):
+        tracker.value, old_value = new_value, tracker.value
+
+        if self.compare_values(new_value, old_value):
+            self.heap_up(tracker.index)
+        else:
+            self.heap_down(tracker.index)
+
     def sanitize_index(self, i):
         if i < 0:
             return len(self.values) + i

@@ -5,6 +5,40 @@ import unittest
 
 
 class TestTrackingBinaryHeap(unittest.TestCase):
+    def test_change_value_to_new_min(self):
+        heap = TrackingBinaryHeap()
+
+        n = 45
+        data = list(range(1, n))
+
+        inserted = []
+        for d in data:
+            inserted.append(heap.insert(d))
+
+        max_value = inserted[-1]
+        heap.change_value(max_value, 0)
+
+        min_value = heap.extract_min()
+
+        self.assertEqual(min_value, 0)
+
+    def test_change_min_value(self):
+        heap = TrackingBinaryHeap()
+
+        n = 45
+        data = list(range(n))
+
+        inserted = []
+        for d in data:
+            inserted.append(heap.insert(d))
+
+        min_value = inserted[0]
+        heap.change_value(min_value, 100)
+
+        new_min_value = heap.extract_min()
+
+        self.assertEqual(new_min_value, 1)
+
     def test_deleting_all_values(self):
         heap = TrackingBinaryHeap()
 
