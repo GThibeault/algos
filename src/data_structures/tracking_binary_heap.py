@@ -2,14 +2,6 @@ from src.data_structures.binary_heap import BinaryHeap
 
 
 class TrackingBinaryHeap(BinaryHeap):
-    def swap_values(self, i, r):
-        super().swap_values(i, r)
-
-        i = self.sanitize_index(i)
-        r = self.sanitize_index(r)
-
-        self.values[i].index, self.values[r].index = i, r
-
     def delete(self, tracker):
         i = tracker.index
 
@@ -41,6 +33,14 @@ class TrackingBinaryHeap(BinaryHeap):
 
     def create_value(self, val, index):
         return Tracker(val, index)
+
+    def swap_values(self, i, r):
+        super().swap_values(i, r)
+
+        i = self.sanitize_index(i)
+        r = self.sanitize_index(r)
+
+        self.values[i].index, self.values[r].index = i, r
 
 
 class Tracker(object):
