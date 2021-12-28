@@ -3,16 +3,16 @@ class BinaryHeap(object):
         self.values = []
 
         if key is not None:
-            self.key = key
+            self.__compare_values = key
         else:
-            self.key = self.__default_key
+            self.__compare_values = self.__default_compare
 
     def is_empty(self):
         return len(self.values) == 0
 
     def peek_min(self):
         if self.values:
-            return self.values[0]
+            return self.__get_value(0)
         else:
             return None
 
@@ -26,8 +26,10 @@ class BinaryHeap(object):
         if not self.values:
             raise LookupError("Empty heap")
 
-        self.values[0], self.values[-1] = self.values[-1], self.values[0]
-        min = self.values.pop()
+        min = self.__get_value(0)
+
+        self.__swap_values(0, -1)
+        del self.values[-1]
 
         self.__heap_down(0)
 
@@ -40,21 +42,21 @@ class BinaryHeap(object):
             m = i
             for c in child_indices:
                 if c < len(self.values):
-                    if self.key(self.values[c], self.values[m]):
+                    if self.__compare_indices(c, m):
                         m = c
 
             if m == i:
                 break
             else:
-                self.values[m], self.values[i] = self.values[i], self.values[m]
+                self.__swap_values(m, i)
                 i = m
 
     def __heap_up(self, i) -> None:
         while i != 0:
             parent_index = self.__get_parent_index(i)
 
-            if self.key(self.values[i], self.values[parent_index]):
-                self.values[i], self.values[parent_index] = self.values[parent_index], self.values[i]
+            if self.__compare_indices(i, parent_index):
+                self.__swap_values(i, parent_index)
 
                 i = parent_index
             else:
@@ -68,5 +70,14 @@ class BinaryHeap(object):
     def __get_parent_index(self, i):
         return (i - 1) // 2
 
-    def __default_key(self, l, r):
+    def __swap_values(self, i, r):
+        self.values[i], self.values[r] = self.values[r], self.values[i]
+
+    def __get_value(self, i):
+        return self.values[i]
+
+    def __compare_indices(self, li, ri):
+        return self.__compare_values(self.__get_value(li), self.__get_value(ri))
+
+    def __default_compare(self, l, r):
         return l <= r
