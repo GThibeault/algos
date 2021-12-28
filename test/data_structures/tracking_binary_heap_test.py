@@ -1,3 +1,4 @@
+from unittest.case import expectedFailure
 from src.data_structures.tracking_binary_heap import TrackingBinaryHeap
 
 import unittest
@@ -20,6 +21,57 @@ class TestTrackingBinaryHeap(unittest.TestCase):
         empty = heap.is_empty()
 
         self.assertTrue(empty)
+
+    def test_deleting_respects_min(self):
+        heap = TrackingBinaryHeap()
+
+        data = [3, 2, 1, 1, 5, 4, 6]
+
+        inserted = []
+        for d in data:
+            inserted.append(heap.insert(d))
+
+        result = []
+        result.append(heap.extract_min())  # 1
+        heap.delete(inserted[2])  # 1
+        result.append(heap.extract_min())  # 2
+        heap.delete(inserted[0])  # 3
+        heap.delete(inserted[5])  # 4
+        result.append(heap.extract_min())  # 5
+        result.append(heap.extract_min())  # 6
+
+        empty = heap.is_empty()
+
+        self.assertTrue(empty)
+
+        expected = [1, 2, 5, 6]
+        self.assertEqual(expected, result)
+
+    def test_deleting_respects_min_with_custom_key(self):
+        def gt_func(l, r): return l > r
+        heap = TrackingBinaryHeap(key=gt_func)
+
+        data = [3, 2, 1, 1, 5, 4, 6]
+
+        inserted = []
+        for d in data:
+            inserted.append(heap.insert(d))
+
+        result = []
+        result.append(heap.extract_min())  # 6
+        heap.delete(inserted[4])  # 5
+        result.append(heap.extract_min())  # 4
+        heap.delete(inserted[0])  # 3
+        heap.delete(inserted[3])  # 1
+        result.append(heap.extract_min())  # 2
+        result.append(heap.extract_min())  # 1
+
+        empty = heap.is_empty()
+
+        self.assertTrue(empty)
+
+        expected = [6, 4, 2, 1]
+        self.assertEqual(expected, result)
 
     def test_empty_true(self):
         heap = TrackingBinaryHeap()
