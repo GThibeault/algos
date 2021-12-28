@@ -4,6 +4,23 @@ import unittest
 
 
 class TestTrackingBinaryHeap(unittest.TestCase):
+    def test_deleting_all_values(self):
+        heap = TrackingBinaryHeap()
+
+        n = 45
+        data = list(range(n))
+
+        inserted = []
+        for d in data:
+            inserted.append(heap.insert(d))
+
+        for ins in inserted:
+            heap.delete(ins)
+
+        empty = heap.is_empty()
+
+        self.assertTrue(empty)
+
     def test_empty_true(self):
         heap = TrackingBinaryHeap()
 
