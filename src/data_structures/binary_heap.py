@@ -17,12 +17,13 @@ class BinaryHeap(object):
             return None
 
     def insert(self, val) -> None:
-        new_entry = self.__create_value(val)
+        current_index = len(self.values)
+        new_entry = self.__create_value(val, current_index)
         self.values.append(new_entry)
 
-        current_index = len(self.values) - 1
-
         self.__heap_up(current_index)
+
+        return new_entry
 
     def extract_min(self):
         if not self.values:
@@ -75,7 +76,7 @@ class BinaryHeap(object):
     def __swap_values(self, i, r):
         self.values[i], self.values[r] = self.values[r], self.values[i]
 
-    def __create_value(self, val):
+    def __create_value(self, val, index):
         return val
 
     def __get_value(self, i):
