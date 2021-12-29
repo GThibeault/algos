@@ -3,18 +3,24 @@ class BellmanFord(object):
         distance = [None if i != origin else 0 for i in range(n)]
         predecessor = [None for i in range(n)]
 
-        for i in range(len(n) - 1):
+        for i in range(n - 1):
             for source, destination, weight in edges:
+                if distance[source] is None:
+                    continue
+
                 new_distance = distance[source] + weight
 
-                if distance[destination] is None or distance[destination] < new_distance:
+                if distance[destination] is None or new_distance < distance[destination]:
                     predecessor[destination] = source
                     distance[destination] = new_distance
 
         for source, destination, weight in edges:
+            if distance[source] is None:
+                continue
+
             new_distance = distance[source] + weight
 
-            if distance[destination] < new_distance:
+            if new_distance < distance[destination]:
                 return BellmanFordResult(True)
 
         paths = self.build_shortest_paths(predecessor)
