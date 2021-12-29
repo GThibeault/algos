@@ -7,14 +7,16 @@ class Dijkstra(object):
         distance = [inf if i != origin else 0 for i in range(n)]
         predecessor = [None for i in range(n)]
 
-        entries = [Entry(i, inf) for i in range(n)]
-        entries[origin].weight = 0
+        trackers = []
 
         def key_func(l, r): return l.weight <= r.weight
         heap = TrackingBinaryHeap(key=key_func)
 
-        for entry in entries:
-            heap.insert(entry)
+        for i in range(n):
+            weight = inf if i != origin else 0
+            entry = Entry(i, weight)
+
+            trackers.append(heap.insert(entry))
 
         while not heap.is_empty():
             source_entry = heap.extract_min()
@@ -26,6 +28,9 @@ class Dijkstra(object):
                 if new_distance < distance[destination]:
                     predecessor[destination] = source
                     distance[destination] = new_distance
+
+                    new_entry = Entry(destination, new_distance)
+                    heap.change_value(trackers[destination], new_entry)
 
         paths = self.build_shortest_paths(predecessor)
 
