@@ -1,23 +1,20 @@
+from math import inf
+
+
 class BellmanFord(object):
     def find_shortest_path(self, origin, n, edges):
-        distance = [None if i != origin else 0 for i in range(n)]
+        distance = [inf if i != origin else 0 for i in range(n)]
         predecessor = [None for i in range(n)]
 
         for i in range(n - 1):
             for source, destination, weight in edges:
-                if distance[source] is None:
-                    continue
-
                 new_distance = distance[source] + weight
 
-                if distance[destination] is None or new_distance < distance[destination]:
+                if new_distance < distance[destination]:
                     predecessor[destination] = source
                     distance[destination] = new_distance
 
         for source, destination, weight in edges:
-            if distance[source] is None:
-                continue
-
             new_distance = distance[source] + weight
 
             if new_distance < distance[destination]:
@@ -27,6 +24,7 @@ class BellmanFord(object):
 
         return BellmanFordResult(False, distance, paths)
 
+    # inefficient but simple
     def build_shortest_paths(self, predecessor):
         paths = [[] for i in range(len(predecessor))]
 
