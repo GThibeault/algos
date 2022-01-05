@@ -1,55 +1,49 @@
+from typing import List, Union
+from src.algorithms.mst.model import MSTResult
 from src.data_structures.tracking_binary_heap import TrackingBinaryHeap
+from src.model.graph_model import WeightedEdge
+from dataclasses import dataclass
+from math import inf
 
 
 class Prims(object):
-    def get_mst(self, adjacency_matrix):
-        def key_func(l, r): return l.weight <= r.weight
-        heap = TrackingBinaryHeap(key=key_func)
+    def get_mst(self, adjacency_matrix: List[List[Union[float, None]]]):
+        n = len(adjacency_matrix)
 
-        picked = [False for i in range(len(adjacency_matrix))]
-        costs = [None for i in range(len(adjacency_matrix))]
-        edges = [None for i in range(len(adjacency_matrix))]
+        def key_func(l: Entry, r: Entry) -> bool: return l.weight <= r.weight
+        heap: TrackingBinaryHeap[Entry] = TrackingBinaryHeap(key=key_func)
 
-        result = []
-        sum = 0
+        entry_generator = (Entry(i, inf if i != 0 else 9) for i in range(n))
+        trackers = [heap.insert(e) for e in entry_generator]
+        parents = [None for i in range(n)]
 
-        start_vertex = 0
-        start_entry = Entry(0, 0)
-        heap.insert(start_entry)
+        result = MSTResult()
 
         while not heap.is_empty():
-            current_vertex, weight = heap.extract_min()
-            picked[current_vertex] = True
+            current = heap.extract_min()
+            current_vertex, weight  = current.vertex, current.weight
 
-            if current_vertex != start_vertex:
-                neighbor = edges[current_vertex]
+            source = parents[current_vertex]
+            if source is not None:
+                result.edges.append(WeightedEdge(
+                    source, current_vertex, weight))
+                result.sum += weight
 
-                result.append((current_vertex, neighbor))
-                sum += weight
-
-            for vertex, edge_weight in enumerate(adjacency_matrix[current_vertex]):
-                if picked[vertex] or edge_weight is None:
+            for neighbor_vertex, weight in enumerate(adjacency_matrix[current_vertex]):
+                if weight is None:
                     continue
 
-                previous_cost = costs[vertex]
+                tracker = trackers[neighbor_vertex]
+                
+                if weight < tracker.value.weight:
+                    new_entry = Entry(neighbor_vertex, weight)
+                    heap.change_value(tracker, new_entry)
+                    parents[neighbor_vertex] = current_vertex
 
-                if previous_cost is None:
-                    costs[vertex] = heap.insert(Entry(vertex, edge_weight))
-                    edges[vertex] = current_vertex
-
-                elif edge_weight < previous_cost.value.weight:
-
-                    heap.change_value(
-                        costs[vertex], Entry(vertex, edge_weight))
-                    edges[vertex] = current_vertex
-
-        return (result, sum)
+        return result
 
 
-class Entry(object):
-    def __init__(self, vertex, weight):
-        self.vertex = vertex
-        self.weight = weight
-
-    def __iter__(self):
-        return iter((self.vertex, self.weight))
+@dataclass
+class Entry:
+    vertex: int
+    weight: float
