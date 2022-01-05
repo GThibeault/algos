@@ -1,13 +1,17 @@
-from math import dist, inf
-from src.data_structures.tracking_binary_heap import TrackingBinaryHeap
+from dataclasses import dataclass
+from math import inf
+from typing import List, Tuple, Union
+from src.algorithms.shortest_path.model import ShortestPathResult
+from src.algorithms.shortest_path.path_builder import PathBuilder
+from src.data_structures.tracking_binary_heap import Tracker, TrackingBinaryHeap
 
 
-class Dijkstra(object):
-    def find_shortest_path(self, origin, n, adjacency):
-        distance = [inf if i != origin else 0 for i in range(n)]
-        predecessor = [None for i in range(n)]
+class Dijkstra:
+    def find_shortest_path(self, origin: int, n: int, adjacency: List[List[Tuple[int, float]]]) -> ShortestPathResult:
+        distance: List[float] = [inf if i != origin else 0 for i in range(n)]
+        predecessor: List[Union[int, None]] = [None for i in range(n)]
 
-        trackers = []
+        trackers: List[Tracker[Entry]] = []
 
         def key_func(l, r): return l.weight <= r.weight
         heap = TrackingBinaryHeap(key=key_func)
@@ -32,31 +36,13 @@ class Dijkstra(object):
                     new_entry = Entry(destination, new_distance)
                     heap.change_value(trackers[destination], new_entry)
 
-        paths = self.build_shortest_paths(predecessor)
+        path_builder = PathBuilder()
+        paths = path_builder.build_shortest_paths(predecessor)
 
-        return DijkstraResult(distance, paths)
-
-    # inefficient but simple
-    def build_shortest_paths(self, predecessor):
-        paths = [[] for i in range(len(predecessor))]
-
-        for i in range(len(predecessor)):
-            p = predecessor[i]
-
-            while p is not None:
-                paths[i].insert(0, p)
-                p = predecessor[p]
-
-        return paths
+        return ShortestPathResult(distance, paths)
 
 
-class Entry(object):
-    def __init__(self, vertex, weight):
-        self.vertex = vertex
-        self.weight = weight
-
-
-class DijkstraResult(object):
-    def __init__(self, distances, paths):
-        self.distances = distances
-        self.paths = paths
+@dataclass
+class Entry:
+    vertex: int
+    weight: float

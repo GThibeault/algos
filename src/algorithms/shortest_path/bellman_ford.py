@@ -1,12 +1,15 @@
 from math import inf
+from src.algorithms.shortest_path.path_builder import PathBuilder
+from src.algorithms.shortest_path.model import ShortestPathResult
+from src.model.graph_model import WeightedEdge
 
 
 class BellmanFord(object):
-    def find_shortest_path(self, origin, n, edges):
+    def find_shortest_path(self, origin: int, n: int, edges: WeightedEdge) -> ShortestPathResult:
         distance = [inf if i != origin else 0 for i in range(n)]
         predecessor = [None for i in range(n)]
 
-        for i in range(n - 1):
+        for _ in range(n - 1):
             for source, destination, weight in edges:
                 new_distance = distance[source] + weight
 
@@ -18,28 +21,9 @@ class BellmanFord(object):
             new_distance = distance[source] + weight
 
             if new_distance < distance[destination]:
-                return BellmanFordResult(True)
+                return ShortestPathResult(negative_loop=True)
 
-        paths = self.build_shortest_paths(predecessor)
+        path_builder = PathBuilder()
+        paths = path_builder.build_shortest_paths(predecessor)
 
-        return BellmanFordResult(False, distance, paths)
-
-    # inefficient but simple
-    def build_shortest_paths(self, predecessor):
-        paths = [[] for i in range(len(predecessor))]
-
-        for i in range(len(predecessor)):
-            p = predecessor[i]
-
-            while p is not None:
-                paths[i].insert(0, p)
-                p = predecessor[p]
-
-        return paths
-
-
-class BellmanFordResult(object):
-    def __init__(self, negative_loop, distances=None, paths=None):
-        self.negative_loop = negative_loop
-        self.distances = distances
-        self.paths = paths
+        return ShortestPathResult(distance, paths)
