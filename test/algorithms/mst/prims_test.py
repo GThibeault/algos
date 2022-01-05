@@ -1,4 +1,4 @@
-from src.algorithms.prims import Prims
+from src.algorithms.mst.prims import Prims
 
 import unittest
 

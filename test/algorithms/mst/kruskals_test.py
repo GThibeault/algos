@@ -1,4 +1,4 @@
-from src.algorithms.kruskals import Kruskals, Edge
+from src.algorithms.mst.kruskals import Kruskals, Edge
 
 import unittest
 

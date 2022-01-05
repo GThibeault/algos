@@ -1,17 +1,17 @@
-from __future__ import annotations
-from typing import Iterable, List
+from typing import Iterable
+from src.algorithms.mst.model import MSTResult
 from src.data_structures.disjoint_forest import DisjointForest
-from dataclasses import dataclass, field
+from src.model.graph_model import Edge
 
 
 class Kruskals(object):
-    def get_mst(self, n: int, edges: Iterable[Edge]) -> KruskalsResult:
+    def get_mst(self, n: int, edges: Iterable[Edge]) -> MSTResult:
         sorted_edges = sorted(edges, key=lambda e: e.weight)
 
         forest = DisjointForest()
         sets = [forest.make_set(i) for i in range(n)]
 
-        res = KruskalsResult()
+        res = MSTResult()
 
         while len(sorted_edges) > 0:
             current_edge = sorted_edges.pop(0)
@@ -28,16 +28,3 @@ class Kruskals(object):
                 break
 
         return res
-
-
-@dataclass
-class Edge:
-    source: int
-    target: int
-    weight: int
-
-
-@dataclass
-class KruskalsResult:
-    edges: List[Edge] = field(default_factory=list)
-    sum: int = 0
