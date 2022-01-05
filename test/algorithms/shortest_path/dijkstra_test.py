@@ -1,4 +1,4 @@
-from src.algorithms.dijkstra import Dijkstra
+from src.algorithms.shortest_path.dijkstra import Dijkstra
 
 import unittest
 

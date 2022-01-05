@@ -1,4 +1,4 @@
-from src.algorithms.bellman_ford import BellmanFord
+from src.algorithms.shortest_path.bellman_ford import BellmanFord
 
 import unittest
 
