@@ -1,11 +1,11 @@
 from typing import Iterable
 from src.algorithms.mst.model import MSTResult
 from src.data_structures.disjoint_forest import DisjointForest
-from src.model.graph_model import Edge
+from src.model.graph_model import WeightedDirectedEdge
 
 
 class Kruskals(object):
-    def get_mst(self, n: int, edges: Iterable[Edge]) -> MSTResult:
+    def get_mst(self, n: int, edges: Iterable[WeightedDirectedEdge]) -> MSTResult:
         sorted_edges = sorted(edges, key=lambda e: e.weight)
 
         forest = DisjointForest()
@@ -13,8 +13,7 @@ class Kruskals(object):
 
         res = MSTResult()
 
-        while len(sorted_edges) > 0:
-            current_edge = sorted_edges.pop(0)
+        for current_edge in sorted_edges:
             source_set, target_set = sets[current_edge.source], sets[current_edge.target]
 
             if not forest.are_in_same_set(source_set, target_set):

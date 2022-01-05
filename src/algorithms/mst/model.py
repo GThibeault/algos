@@ -1,9 +1,9 @@
 from dataclasses import dataclass, field
 from typing import List
-from src.model.graph_model import Edge
+from src.model.graph_model import WeightedDirectedEdge
 
 
 @dataclass
 class MSTResult:
-    edges: List[Edge] = field(default_factory=list)
+    edges: List[WeightedDirectedEdge] = field(default_factory=list)
     sum: int = 0

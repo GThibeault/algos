@@ -1,4 +1,4 @@
-from src.algorithms.mst.kruskals import Kruskals, Edge
+from src.algorithms.mst.kruskals import Kruskals, WeightedDirectedEdge
 
 import unittest
 
@@ -72,7 +72,7 @@ class TestKruskals(unittest.TestCase):
                 edge_weight = adjacency[i][j]
 
                 if edge_weight is not None:
-                    edge = Edge(i, j, edge_weight)
+                    edge = WeightedDirectedEdge(i, j, edge_weight)
                     edges.append(edge)
 
         return (len(adjacency), edges)
