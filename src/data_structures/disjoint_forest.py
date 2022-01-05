@@ -1,6 +1,6 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import NoReturn, TypeVar, Generic
+from typing import TypeVar, Generic
 
 
 T = TypeVar("T")
@@ -20,7 +20,7 @@ class DisjointForest(Generic[T]):
 
         return repr_1 is repr_2
 
-    def join_sets(self, set_1: DisjointForestSet[T], set_2: DisjointForestSet[T]) -> NoReturn:
+    def join_sets(self, set_1: DisjointForestSet[T], set_2: DisjointForestSet[T]) -> None:
         repr_1, repr_2 = self._get_representative(
             set_1), self._get_representative(set_2)
 
