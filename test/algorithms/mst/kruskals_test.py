@@ -1,4 +1,4 @@
-from src.algorithms.mst.kruskals import Kruskals, WeightedDirectedEdge
+from src.algorithms.mst.kruskals import Kruskals, WeightedEdge
 
 import unittest
 
@@ -14,6 +14,19 @@ class TestKruskals(unittest.TestCase):
         result = kruskals.get_mst(n, edges)
 
         self.assertEqual(result.sum, 6)
+
+    def test_really_simple_graph_result(self):
+        kruskals = Kruskals()
+
+        graph = [[None, 2, None, 1], [2, None, None, 2],
+                 [None, None, None, 4], [1, None, 3, None]]
+        n, edges = self._build_kruskals_params(graph)
+
+        result = kruskals.get_mst(n, edges)
+
+        self.assertIn(WeightedEdge(0, 1, 2), result.edges)
+        self.assertIn(WeightedEdge(0, 3, 1), result.edges)
+        self.assertIn(WeightedEdge(3, 2, 3), result.edges)
 
     def test_simple_graph(self):
         kruskals = Kruskals()
@@ -72,7 +85,7 @@ class TestKruskals(unittest.TestCase):
                 edge_weight = adjacency[i][j]
 
                 if edge_weight is not None:
-                    edge = WeightedDirectedEdge(i, j, edge_weight)
+                    edge = WeightedEdge(i, j, edge_weight)
                     edges.append(edge)
 
         return (len(adjacency), edges)

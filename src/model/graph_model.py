@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 
 @dataclass
-class WeightedDirectedEdge:
-    source: int
-    target: int
+class WeightedEdge:
+    vertex_1: int
+    vertex_2: int
     weight: int
