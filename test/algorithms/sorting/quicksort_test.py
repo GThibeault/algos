@@ -1,10 +1,20 @@
-from src.algorithms.quicksort import Quicksort
+from src.algorithms.sorting.quicksort import Quicksort
 
 import unittest
 
 
 class TestQuicksort(unittest.TestCase):
     def test_simple_array(self):
+        quick = Quicksort()
+
+        array = [5, 2, 4, 7, 6, 8, 1]
+        expected = sorted(array)
+
+        quick.sort(array)
+
+        self.assertEqual(expected, array)
+
+    def test_simple_array_no_2(self):
         quick = Quicksort()
 
         array = [5, 2, 4, 2, 6, 8, 1]
