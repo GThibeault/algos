@@ -18,12 +18,12 @@ class RabinKarpMatcher:
         h = d ** (m - 1) % q
         t, p = 0, 0
 
-        for s in range(m):
-            p = (d * p + pattern_int[s]) % q
-            t = (d * t + text_int[s]) % q
+        for pat, tex in zip(pattern_int, text_int):
+            p = (d * p + pat) % q
+            t = (d * t + tex) % q
 
         for s in range(n - m + 1):
-            if p == t:
+            if p == t or pattern == "":
                 if text[s : s + m] == pattern:
                     matches.append(s)
 
@@ -33,4 +33,4 @@ class RabinKarpMatcher:
         return matches
 
     def _text_to_int(self, text: str) -> List[int]:
-        return [int(t) for t in text]
+        return [ord(t) for t in text]
