@@ -79,3 +79,14 @@ class TestNaiveStringMatcher(unittest.TestCase):
         expected = []
 
         self.assertEqual(results, expected)
+
+    def test_prefix_match(self):
+        matcher = NaiveMatcher()
+
+        text = "ababaca"
+        pattern = "abaca"
+
+        results = matcher.match(text, pattern)
+        expected = [2]
+
+        self.assertEqual(results, expected)
