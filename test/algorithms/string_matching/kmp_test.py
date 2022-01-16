@@ -21,7 +21,7 @@ class TestKMPMatcher(unittest.TestCase):
         pattern = ""
 
         results = matcher.match(text, pattern)
-        expected = [0, 1, 2, 3]
+        expected = [0, 1, 2]
 
         self.assertEqual(results, expected)
 
