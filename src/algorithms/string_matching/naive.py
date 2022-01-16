@@ -10,8 +10,8 @@ class NaiveMatcher:
 
         n, m = len(text), len(pattern)
 
-        for i in range(n - m):
-            if text[i : i + m + 1] == pattern:
+        for i in range(n - m + 1):
+            if text[i : i + m] == pattern:
                 matches.append(i)
 
         return matches
